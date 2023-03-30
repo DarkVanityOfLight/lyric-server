@@ -1,16 +1,15 @@
-# Spicetify Creator
+## lyric-server
+This is a spicetify plugin that serves lyrics via a websocket to all registered clients.
 
-Spicetify Creator is a tool to compile modern Typescript/Javascript code to Spicetify extensions and custom apps.
+## Setup
+- Clone this Repo
+- Modify the src/app.tsx file
+- Add/remove addresses to the addresses array or use the default one (127.0.0.1:5001/ws)
+- Run `yarn run build`
+- Run `spicetify config extensions lyric-server.js`
+- Run `spicetify apply`
+- Have fun with it
 
-## Features
-- Typescript and React syntax
-- Import node packages
-- CSS/SCSS with PostCSS support
-- Extremely fast compile time with esbuild.
-- Plugins
-
-## Docs
-Check out [Spicetify's docs](https://spicetify.app/docs/development/spicetify-creator/the-basics)!
 
 ## Made with Spicetify Creator
 - https://github.com/spicetify/spicetify-creator
