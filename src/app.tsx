@@ -68,7 +68,7 @@ function getCurrentTrackId(): string | null {
 }
 
 // Fetch the lyrics for a track
-function fetchLyrics(id: string): Promise<LyricLine[] | null> {
+async function fetchLyrics(id: string): Promise<LyricLine[] | null> {
     const baseURL = "wg://lyrics/v1/track/";
 
     return Spicetify.CosmosAsync.get(baseURL + id)
@@ -98,10 +98,10 @@ function sendLyricsToAll(sockets: Iterable<WebSocket>) {
     }
 }
 
-function sendTimeToAll(sockets: WebSocket[]) {
-    sockets.forEach((socket) => {
+function sendTimeToAll(sockets: Iterable<WebSocket>) {
+    for (let socket of sockets) {
         sendCurrentTime(socket);
-    });
+    }
 }
 
 // Main function to be called on startup
