@@ -130,9 +130,11 @@ async function main() {
 
     // When the song progress changes, send the time to all sockets
     Spicetify.Player.addEventListener("onprogress", event => {
+        if (event == undefined) return;
+
         if (event.data != currentTime) {
             currentTime = event.data
-            sendTimeToAll(sockets);
+            sendTimeToAll(sockets.values());
         }
     });
 }
