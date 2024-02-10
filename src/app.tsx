@@ -64,17 +64,12 @@ function sendCurrentTime(socket: WebSocket) {
 
 // Get the ID of the current track
 function getCurrentTrackId(): string | null {
-    if (Spicetify.Player.data?.track == undefined) {
-        return null;
-    }
-
-    const trackURI = Spicetify.Player.data.track.uri;
-    return getTrackId(trackURI);
+    return Spicetify.Player.data?.item.uri.split(":")[2]
 }
 
 // Fetch the lyrics for a track
 function fetchLyrics(id: string): Promise<LyricLine[] | null> {
-    const baseURL = "https://spclient.wg.spotify.com/lyrics/v1/track/";
+    const baseURL = "wg://lyrics/v1/track/";
 
     return Spicetify.CosmosAsync.get(baseURL + id)
         .then((resp) => {
