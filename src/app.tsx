@@ -20,17 +20,17 @@ function createConnection(address: string) {
 
     // When the socket is opened, register it and send the current lyrics and time
     socket.addEventListener('open', (event) => {
-            registerSocket(socket, address);
-            });
+        registerSocket(socket, address);
+    });
 
     // If the socket is closed, try to reconnect after a delay
     socket.onclose = function(event) {
         console.log('WebSocket is closed. Code: ' + event.code);
         sockets.delete(address)
         setTimeout(function() {
-                console.log('WebSocket reconnecting...');
-                createConnection(address, socket);
-                }, 1000);
+            console.log('WebSocket reconnecting...');
+            createConnection(address, socket);
+        }, 1000);
     };
 }
 
@@ -81,32 +81,32 @@ function fetchLyrics(id: string): Promise<LyricLine[] | null> {
             const lyrics: LyricLine[] = resp.lines;
             return lyrics;
         })
-    .catch((e) => {
-        console.error(`Failed to fetch lyrics for track ${id}: ${e}`);
-        return null;
-    });
+        .catch((e) => {
+            console.error(`Failed to fetch lyrics for track ${id}: ${e}`);
+            return null;
+        });
 }
 
 async function getCurrentTrackLyrics(): Promise<LyricLine[] | null> {
-  const trackId = getCurrentTrackId();
-  if (trackId === null) {
-    console.error('No track is currently playing.');
-    return null;
-  }
+    const trackId = getCurrentTrackId();
+    if (trackId === null) {
+        console.error('No track is currently playing.');
+        return null;
+    }
 
-  return fetchLyrics(trackId);
+    return fetchLyrics(trackId);
 }
 
 function sendLyricsToAll(sockets: WebSocket[]) {
-  sockets.forEach((socket) => {
-    sendCurrentLyrics(socket);
-  });
+    sockets.forEach((socket) => {
+        sendCurrentLyrics(socket);
+    });
 }
 
 function sendTimeToAll(sockets: WebSocket[]) {
-  sockets.forEach((socket) => {
-    sendCurrentTime(socket);
-  });
+    sockets.forEach((socket) => {
+        sendCurrentTime(socket);
+    });
 }
 
 // Main function to be called on startup
@@ -114,9 +114,9 @@ async function main() {
     // Wait for Spicetify to load
     while (!Spicetify) {
         await new Promise(resolve => setTimeout(resolve, 100));
-    }  
+    }
 
-    while (Spicetify?.Player?.data?.track == null) {
+    while (Spicetify?.Player?.data?.item == null) {
         await new Promise(resolve => setTimeout(resolve, 100));
     }
 
@@ -135,7 +135,7 @@ async function main() {
 
     // When the song progress changes, send the time to all sockets
     Spicetify.Player.addEventListener("onprogress", event => {
-        if (event.data != currentTime){
+        if (event.data != currentTime) {
             currentTime = event.data
             sendTimeToAll(sockets);
         }
