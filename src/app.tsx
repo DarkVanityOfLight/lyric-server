@@ -19,7 +19,7 @@ function createConnection(address: string) {
     const socket = new WebSocket("ws://" + address);
 
     // When the socket is opened, register it and send the current lyrics and time
-    socket.addEventListener('open', (event) => {
+    socket.addEventListener('open', (_) => {
         registerSocket(socket, address);
     });
 
@@ -29,7 +29,7 @@ function createConnection(address: string) {
         sockets.delete(address)
         setTimeout(function() {
             console.log('WebSocket reconnecting...');
-            createConnection(address, socket);
+            createConnection(address);
         }, 1000);
     };
 }
