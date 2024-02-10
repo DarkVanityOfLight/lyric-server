@@ -92,10 +92,10 @@ async function getCurrentTrackLyrics(): Promise<LyricLine[] | null> {
     return fetchLyrics(trackId);
 }
 
-function sendLyricsToAll(sockets: WebSocket[]) {
-    sockets.forEach((socket) => {
+function sendLyricsToAll(sockets: Iterable<WebSocket>) {
+    for (let socket of sockets) {
         sendCurrentLyrics(socket);
-    });
+    }
 }
 
 function sendTimeToAll(sockets: WebSocket[]) {
@@ -125,7 +125,7 @@ async function main() {
     // When the song changes, get the lyrics and send them to all sockets
     Spicetify.Player.addEventListener("songchange", async () => {
         currentLyrics = await getCurrentTrackLyrics();
-        sendLyricsToAll(sockets);
+        sendLyricsToAll(sockets.values());
     });
 
     // When the song progress changes, send the time to all sockets
