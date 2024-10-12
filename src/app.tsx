@@ -69,12 +69,18 @@ function getCurrentTrackId(): string | null {
 
 // Fetch the lyrics for a track
 async function fetchLyrics(id: string): Promise<LyricLine[] | null> {
-    const baseURL = "https://spclient.wg.spotify.com/lyrics/v1/track/";
+    const baseURL = "https://spclient.wg.spotify.com/color-lyrics/v2/track/";
+    const args = "?format=json"
 
-    return Spicetify.CosmosAsync.get(baseURL + id)
+    return Spicetify.CosmosAsync.get(baseURL + id + args)
         .then((resp) => {
-            const lyrics: LyricLine[] = resp.lines;
-            return lyrics;
+            if (resp.lyrics.syncType == "UNSYNCED") { return null }
+            if (resp?.lyrics?.lines) {
+                const lyrics: LyricLine[] = resp.lyrics.lines;
+                return lyrics;
+            } else {
+                return null
+            }
         })
         .catch((e) => {
             console.error(`Failed to fetch lyrics for track ${id}: ${e}`);
